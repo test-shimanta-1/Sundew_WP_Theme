@@ -123,7 +123,7 @@ add_action('init', function() {
 
 add_filter('site_url', function($url, $path) {
     if ($path === 'wp-login.php' || $path === 'wp-login.php?action=register') {
-        return site_url('user/login');
+    return site_url('user/login');
     }
     return $url;
 }, 10, 2);
@@ -135,6 +135,24 @@ add_filter('wp_redirect', function($location) {
     return $location;
 });
 
+add_action('init', function() {
+    if (strpos($_SERVER['REQUEST_URI'], 'wp-login.php') !== false) {
+        if (strpos($_SERVER['REQUEST_URI'], 'action=logout') !== false) {
+            return;
+        }
+        if (!is_user_logged_in()) {
+            wp_redirect(home_url());
+            exit;
+        }else{
+            wp_redirect(admin_url());
+            exit;
+        }
+    }
+    if (strpos($_SERVER['REQUEST_URI'], 'user/login') !== false && is_user_logged_in()){
+        wp_redirect(admin_url());
+        exit;
+    }
+});
 /** login url customization end */
 
 /** create roles & manage capabilities */
