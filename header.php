@@ -10,7 +10,7 @@
 
   <main>
 
-  <?php echo get_template_part('template-parts/topbar-header'); ?>
+  <?php //echo get_template_part('template-parts/topbar-header'); ?>
 
   <!-- Navbar Start -->
     <div class="container-fluid sticky-top bg-white shadow-sm">
@@ -25,11 +25,11 @@
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <div class="navbar-nav ms-auto py-0">
                         <?php
-                        wp_nav_menu(array(
-                        'menu' => 'Navbar-Menu',
-                        'container' => false,
-                        'items_wrap' => '%3$s'
-                        ));
+                        // wp_nav_menu(array(
+                        // 'menu' => 'Navbar-Menu',
+                        // 'container' => false,
+                        // 'items_wrap' => '%3$s'
+                        // ));
                         ?>
                     </div>
                 </div>

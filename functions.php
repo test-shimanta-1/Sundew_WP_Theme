@@ -1,15 +1,11 @@
 <?php
 
-// add_action( 'init', function () {
-//     flush_rewrite_rules( true );
-// }, 99 );
-
 /** theme configuration */
 require_once(get_template_directory() . '/inc/' . 'setup.php');
 
 /** including post-types */
 // include_once(get_template_directory().'/inc/post-types/'.'Services.php');
-include_once(get_template_directory().'/inc/post-types/'.'Emergency.php');
+include_once(get_template_directory() . '/inc/post-types/' . 'Emergency.php');
 include_once(get_template_directory() . '/inc/post-types/' . 'Memoriam.php');
 
 
@@ -121,18 +117,36 @@ add_filter('acf/prepare_field', function ($field) {
 /** end of acf validations */
 
 /** login page url customization */
+add_action('init', function() {
+    add_rewrite_rule('^user/login/?$', 'wp-login.php', 'top');
+});
+
+add_filter('site_url', function($url, $path) {
+    if ($path === 'wp-login.php' || $path === 'wp-login.php?action=register') {
+        return site_url('user/login');
+    }
+    return $url;
+}, 10, 2);
+
+add_filter('wp_redirect', function($location) {
+    if (strpos($location, 'wp-login.php') !== false) {
+        return site_url('user/login');
+    }
+    return $location;
+});
 
 /** login url customization end */
 
 /** create roles & manage capabilities */
 add_role('faculty', 'Faculty');
-function author_level_up() {
-    $role = get_role('faculty');  
+function author_level_up()
+{
+    $role = get_role('faculty');
     $role->add_cap('read');
     $role->add_cap('edit_users');
 }
-add_action( 'admin_init', 'author_level_up');
+add_action('admin_init', 'author_level_up');
 /** end of custom user roles */
 
-   
+
 ?>
