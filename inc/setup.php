@@ -41,9 +41,11 @@ add_theme_support('post-thumbnails');
 /** SVG support */
 function cc_mime_types($mimes) {
     $mimes['svg'] = 'image/svg+xml';
+    $mimes['webp'] = 'image/webp';
     return $mimes;
 }
 add_filter('upload_mimes', 'cc_mime_types');
+
 
 // Disable WordPress JPEG compression (set to 100%)
 add_filter('jpeg_quality', function($arg){ return 100; });
