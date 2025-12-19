@@ -41,31 +41,27 @@ function custom_post_type_memoriam() {
 add_action('init', 'custom_post_type_memoriam');
 
 /** url rewrite rules ~ removing /memoriam from the slug url */
-function custom_memoriam_permalink($url, $post) {
-    if ($post->post_type === 'our_memoriam') {
+add_filter('post_type_link', 'remove_memoriam_slug', 10, 2);
+function remove_memoriam_slug($post_link, $post) {
+    if ($post->post_type === 'our_memoriam' && $post->post_status === 'publish') {
         return home_url('/' . $post->post_name . '/');
     }
-    return $url;
+    return $post_link;
 }
-add_filter('post_type_link', 'custom_memoriam_permalink', 10, 2);
 
 /** permalink flush re-write hook triggers! */
-function custom_memoriam_rewrite() {
-    $posts = get_posts(array(
-        'post_type'      => 'our_memoriam',
-        'posts_per_page' => -1,
-    ));
-
-    if ($posts) {
-        foreach ($posts as $p) {
-            add_rewrite_rule(
-                $p->post_name . '/?$',
-                'index.php?our_memoriam=' . $p->post_name,
-                'top'
-            );
-        }
-    }
+add_action('init', 'add_memoriam_rewrite_rules');
+function add_memoriam_rewrite_rules() {
+    add_rewrite_rule(
+        '^([^/]+)/?$',
+        'index.php?our_memoriam=$matches[1]',
+        'top'
+    );
 }
-add_action('init', 'custom_memoriam_rewrite');
+add_filter('query_vars', function ($vars) {
+    $vars[] = 'our_memoriam';
+    return $vars;
+});
+
 
 ?>

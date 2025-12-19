@@ -94,3 +94,19 @@ add_action( 'admin_bar_menu', 'display_template_file_in_admin_bar', 999 );
 //      add_theme_support( 'wc-product-gallery-slider' );
 // }
 // add_action('after_setup_theme', 'mytheme_add_woocommerce_support');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

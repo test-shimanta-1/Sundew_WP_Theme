@@ -2,6 +2,7 @@
 
 /** theme configuration */
 require_once(get_template_directory() . '/inc/' . 'setup.php');
+require_once(get_template_directory() . '/theme-settings.php');
 
 /** including post-types */
 // include_once(get_template_directory().'/inc/post-types/'.'Services.php');
@@ -21,6 +22,7 @@ add_filter('auth_cookie_expiration', 'user_auth_remember_me');
 
 /** 2FA in wp-login.php */
 add_filter('authenticate', function ($user, $u, $p) {
+
     if (!empty($_POST['2fa_code']))
         return $user;
     if (is_wp_error($user))
@@ -28,11 +30,19 @@ add_filter('authenticate', function ($user, $u, $p) {
     if ($user instanceof WP_User && $u && $p) {
         $code = rand(100000, 999999);
         update_user_meta($user->ID, '2fa_code', $code);
+        
+        // wp_mail('shimanta.das@sundewsolutions.com', 'test email otp', 'here is a otp for the localhost website: '.$code);
+
         set_transient("2fa_user_$user->ID", 1, 300);
         set_transient("2fa_u_$user->ID", $u, 300);
         set_transient("2fa_p_$user->ID", $p, 300);
         wp_redirect(wp_login_url() . "?2fa=$user->ID");
         exit;
+    }else{
+        $handle = fopen('data.txt', 'a');
+        $data = "dummyhhhh ";
+        fwrite($handle, $data);
+        fclose($handle);
     }
     return $user;
 }, 30, 3);
@@ -153,6 +163,44 @@ add_action('init', function() {
         exit;
     }
 });
+
+/** login attempts */
+add_action( 'wp_login_failed', 'sdw_handle_failed_login' );
+function sdw_handle_failed_login( $username ) {
+    if(username_exists($username)){
+        $ip = $_SERVER['REMOTE_ADDR'];
+        $data = get_transient('login_fail_'.$username."_".$ip);
+
+        if ( ! $data ) {
+            $data = [
+                'count' => get_option('anno_max_login_attmpt')-1, // M = N - 1 | M - count number, N - real count 
+                'locked' => false
+            ];
+        } elseif ( $data['count'] <= 0 ) {
+            $data['locked'] = true;
+        } else {
+            $data['count']--;
+        }
+        set_transient('login_fail_'.$username."_".$ip, $data, get_option('anno_login_expiration_time') ); // change expiration in sec.
+    }
+}
+
+add_filter( 'login_errors', 'swd_custom_login_error_message' );
+function swd_custom_login_error_message( $error ) {
+    $username = $_POST['log'] ?? '';
+    if(username_exists($username)){
+        $ip = $_SERVER['REMOTE_ADDR'];
+        $data = get_transient('login_fail_'.$username."_".$ip);
+        if ( ! $data ) {
+            return $error;
+        }
+        if ( ! empty( $data['locked'] ) ) {
+            return get_option('anno_failed_attempt_warning_msg') ? get_option('anno_failed_attempt_warning_msg') : 'Too many failed login attempts. Please try after some time!';
+        }
+        return 'Invalid credentials. Attempts remaining: ' . ( $data['count'] + 1 );
+    }
+    
+}
 /** login url customization end */
 
 /** create roles & manage capabilities */
@@ -161,10 +209,11 @@ function author_level_up()
 {
     $role = get_role('faculty');
     $role->add_cap('read');
-    $role->add_cap('edit_users');
+    $role->add_cap('edit_users');   
 }
 add_action('admin_init', 'author_level_up');
 /** end of custom user roles */
+
 
 
 ?>

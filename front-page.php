@@ -2,10 +2,6 @@
 $page_id = get_the_ID();
 ?>
 
-
-    
-
-
     <!-- Services Start -->
     <div class="container-fluid py-5">
         <div class="container">
@@ -102,6 +98,7 @@ $page_id = get_the_ID();
         </div>
     </div>
     <!-- Services End -->
+
 
 
     <!-- Appointment Start -->
