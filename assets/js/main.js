@@ -105,3 +105,29 @@ console.log("custom js running! ");
 })(jQuery);
 
 
+/** jquery datatables */
+jQuery(document).ready(function ($) {
+
+    var table = $('#myTable').DataTable({
+        orderCellsTop: true,
+        fixedHeader: true,
+        pageLength: 5,
+        lengthMenu: [
+            [5, 10, 25, 50, -1],
+            [5, 10, 25, 50, "All"]
+        ],
+        dom: 'Blfrtip',
+        buttons: ['excel', 'pdf', 'print']
+    });
+
+    // Column search
+    $('#myTable thead tr.filters th').each(function (i) {
+        $('input', this).on('keyup change', function () {
+            if (table.column(i).search() !== this.value) {
+                table.column(i).search(this.value).draw();
+            }
+        });
+    });
+
+});
+
