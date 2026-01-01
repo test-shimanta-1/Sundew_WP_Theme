@@ -22,24 +22,6 @@ function custom_theme_assets()
     wp_enqueue_script('tempusdominus', get_template_directory_uri() . '/assets/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js', array('jquery'), null, true);
     wp_enqueue_script('datatable-js', "https://cdn.datatables.net/v/dt/dt-2.3.6/datatables.min.js", array('jquery'), '2.3.6', true);
     wp_enqueue_script('main-js', get_template_directory_uri() . '/assets/js/main.js', array('jquery'), time(), true);
-
-
-    // DataTable core
-    wp_enqueue_style('dt-css', 'https://cdn.datatables.net/1.13.8/css/jquery.dataTables.min.css');
-    wp_enqueue_script('dt-js', 'https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js', ['jquery'], null, true);
-
-    // Buttons
-    wp_enqueue_style('dt-btn-css', 'https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css');
-    wp_enqueue_script('dt-btn-js', 'https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js', ['dt-js'], null, true);
-
-    // Export dependencies
-    wp_enqueue_script('jszip', 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js', [], null, true);
-    wp_enqueue_script('pdfmake', 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js', [], null, true);
-    wp_enqueue_script('pdfmake-fonts', 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js', ['pdfmake'], null, true);
-
-    wp_enqueue_script('dt-html5', 'https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js', ['dt-btn-js'], null, true);
-    wp_enqueue_script('dt-print', 'https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js', ['dt-btn-js'], null, true);
-
 }
 add_action('wp_enqueue_scripts', 'custom_theme_assets');
 
