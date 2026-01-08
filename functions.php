@@ -122,43 +122,42 @@ add_filter('acf/prepare_field', function ($field) {
 /** end of acf validations */
 
 /** login page url customization */
-// add_action('init', function() {
-//     add_rewrite_rule('^user/login/?$', 'wp-login.php', 'top');
-// });
+add_action('init', function() {
+    add_rewrite_rule('^user/login/?$', 'wp-login.php', 'top');
+});
 
-// add_filter('site_url', function($url, $path) {
-//     if ($path === 'wp-login.php' || $path === 'wp-login.php?action=register') {
-//     return site_url('user/login');
-//     }
-//     return $url;
-// }, 10, 2);
+add_filter('site_url', function($url, $path) {
+    if ($path === 'wp-login.php' || $path === 'wp-login.php?action=register') {
+    return site_url('user/login');
+    }
+    return $url;
+}, 10, 2);
 
-// add_filter('wp_redirect', function($location) {
-//     if (strpos($location, 'wp-login.php') !== false) {
-//         return site_url('user/login');
-//     }
-//     return $location;
-// });
+add_filter('wp_redirect', function($location) {
+    if (strpos($location, 'wp-login.php') !== false) {
+        return site_url('user/login');
+    }
+    return $location;
+});
 
-// add_action('init', function() {
-//     if (strpos($_SERVER['REQUEST_URI'], 'wp-login.php') !== false) {
-//         if (strpos($_SERVER['REQUEST_URI'], 'action=logout') !== false) {
-//             return;
-//         }
-//         if (!is_user_logged_in()) {
-//             wp_redirect(home_url());
-//             exit;
-//         }else{
-//             wp_redirect(admin_url());
-//             exit;
-//         }
-//     }
-//     if (strpos($_SERVER['REQUEST_URI'], 'user/login') !== false && is_user_logged_in()){
-//         wp_redirect(admin_url());
-//         exit;
-//     }
-// });
-
+add_action('init', function() {
+    if (strpos($_SERVER['REQUEST_URI'], 'wp-login.php') !== false) {
+        if (strpos($_SERVER['REQUEST_URI'], 'action=logout') !== false) {
+            return;
+        }
+        if (!is_user_logged_in()) {
+            wp_redirect(home_url());
+            exit;
+        }else{
+            wp_redirect(admin_url());
+            exit;
+        }
+    }
+    if (strpos($_SERVER['REQUEST_URI'], 'user/login') !== false && is_user_logged_in()){
+        wp_redirect(admin_url());
+        exit;
+    }
+});
 /** login attempts */
 add_action( 'wp_login_failed', 'sdw_handle_failed_login' );
 function sdw_handle_failed_login( $username ) {
