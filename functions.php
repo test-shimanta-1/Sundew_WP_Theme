@@ -8,7 +8,7 @@ require_once(get_template_directory() . '/theme-settings.php');
 // include_once(get_template_directory() . '/inc/post-types/' . 'Inventor.php');
 // include_once(get_template_directory().'/inc/post-types/'.'Services.php');
 // include_once(get_template_directory() . '/inc/post-types/' . 'Emergency.php');
-// include_once(get_template_directory() . '/inc/post-types/' . 'Memoriam.php');
+include_once(get_template_directory() . '/inc/post-types/' . 'Memoriam.php');
 
 
 /** customizing the login page */
